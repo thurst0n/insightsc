@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<!--var myDataRef = new Firebase('https://insightsc.firebaseIO.com');-->
+<html ng-app="clanstats">
+
+<head>
+    <script src='https://cdn.firebase.com/js/client/2.2.1/firebase.js'></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.15/angular.js"></script>
+    <script src="https://cdn.firebase.com/libs/angularfire/1.1.1/angularfire.min.js"></script>
+    <script src="clanstats.js"></script>
+</head>
+
+
+<body>
+<div>
+	<nav class="navbar navbar-default" role="navigation">
+		<div class="container-fluid">
+			<div class="navbar-header">
+				<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#auth">
+					<span class="sr-only">Toggle navigation</span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+				</button>
+				<a href="#" class="navbar-brand">Insight Gaming Clan Stats</a>
+			</div>
+
+			<div class="collapse navbar-collapse" id="auth">
+				<form id="authForm" class="navbar-form navbar-right" ng-controller="AuthCtrl">
+					<fieldset ng-hide="auth.user" ng-show="!auth.user">
+						<div class="form-group">
+							<input style="max-width:200px" type="email" class="form-control" placeholder="email" ng-model="email" />
+						</div>
+						<div class="form-group">
+							<input style="max-width:200px" type="password" class="form-control" placeholder="password" ng-model="password" />
+						</div>
+						<button style="max-width:200px" class="btn btn-default" ng-click="signIn()">Sign In</button>
+
+					</fieldset>
+					<span ng-show="auth.user" ng-hide="!auth.user">
+						 <div id="signed_in_as" class="navbar-text navbar-right">
+							Signed in as {{auth.user.password.email}}<button  style="max-width:200px" class="btn btn-default" ng-click="unAuth()">Sign Out</button>
+						 </div>
+							   
+					</span>
+
+				</form>
+			</div>
+		</div>
+	</nav>
+
+	<div class="container" ng-controller="AlertCtrl">
+		<div class="alert alert-{{alert.class}}" ng-model="alert.message" ng-show="alert.message">
+			{{alert.message}}
+		</div>
+	</div>
+</div>
+
+<div class="container" ng-controller="DataCtrl">
+	<div class="row">
+
+		<table id="clanWarTable" class="table table-bordered table-hover table-striped">
+			<thead>
+				<tr>
+					<th>Insight Gaming</th>
+					<th></th>
+					<th></th>
+					<th>Opponent</th>
+				</tr>
+				<tbody>
+					<tr ng-repeat="war in data">
+						<td>{{ war.clan1 }}</td>
+						<td> {{ war.wins }}</td>
+						<td> {{ war.losses }}</td>
+						<td> {{ war.clan2 }}</td>
+					</tr>
+				</tbody>
+			</thead>
+		</table>
+
+	</div>
+	<div class="row" ng-show="auth.user" ng-hide="!auth.user">
+		<form class="form-horizontal">
+			<div class="form-group">
+				<label class="col-xs-2 control-label" for="otherClan">Opponent Name:</label>
+				<div class="col-xs-3">
+					<input type="text" class="form-control" id="otherClan" placeholder="Opponent" ng-model="otherClan"> </div>
+			</div>
+			<div class="form-group">
+				<label class="col-xs-2 control-label" for="clanWins">Wins:</label>
+				<div class="col-xs-2">
+					<input type="number" class="form-control" id="clanWins" placeholder="Wins" ng-model="clanWins"> </div>
+			</div>
+			<div class="form-group">
+				<label class="col-xs-2 control-label" for="clanLosses">Losses:</label>
+				<div class="col-xs-2">
+					<input type="number" class="form-control" id="clanLosses" placeholder="Losses" ng-model="clanLosses"> </div>
+			</div>
+			<div id="update" class="col-xs-offset-2 btn btn-primary" ng-click="addGame()">Update</div>
+		</form>
+	</div>
+</div>
+</body>
+</html>
